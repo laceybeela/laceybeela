@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Theme tokens (Tailwind v4 inline) */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-blush: #F6B1B8;
+  --color-sand:  #FBE9D0;
+  --color-plum:  #4A284D;
+  --color-amber: #F4B63E;
+  --color-ether: #8FCBDA;
+  --color-sage:  #A6BFA1;
+  --color-cream: #FFF8F2;
+
+  --font-sans: var(--font-syne);
+  --font-display: var(--font-italianno);
 }
 
+/* Light/Dark bases */
+:root {
+  --background: var(--color-cream);
+  --foreground: var(--color-plum);
+  --header: var(--color-plum);   /* dark headers on light bg */
+  --accent: var(--color-amber);
+}
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--color-plum);
+    --foreground: var(--color-sand);
+    --header: var(--color-sand); /* light headers on dark bg */
+    --accent: var(--color-ether);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+body { background: var(--background); color: var(--foreground); }
+/* ↓ This change is key */
+:where(h1, h2, h3, h4) { color: var(--header); }
+
+/* optional glow */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(246,177,184,.3) }
+  50%      { box-shadow: 0 0 25px rgba(140,203,218,.6) }
 }
+.glow-animate { animation: pulseGlow 4s ease-in-out infinite; }

@@ -1,103 +1,243 @@
-import Image from "next/image";
+import Nav from '@/components/nav'
+import Section from '@/components/section'
+import { GlowButton } from '@/components/glow-button'
+import Image from 'next/image'
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <>
+      <Nav />
+      
+      {/* Hero Section */}
+      <Section className="bg-cream pt-20">
+        <div className="max-w-4xl mx-auto text-center mb-16">
+          <h1 className="text-5xl font-bold mb-6" style={{ color: '#4A284D' }}>
+            Lacey Beela
+          </h1>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+            The bridge between software and soul, weaving technology with human connection
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+      </Section>
+
+      {/* Main About Content */}
+      <Section className="bg-sand">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            
+            {/* Profile Image */}
+            <div className="order-2 lg:order-1">
+              <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/IMG_2488.JPG"
+                  alt="Lacey Beela"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            
+            {/* Bio Content */}
+            <div className="order-1 lg:order-2">
+              <h2 className="text-3xl font-bold mb-6" style={{ color: '#4A284D' }}>
+                My Story
+              </h2>
+              <div className="space-y-4 text-gray-700 leading-relaxed">
+                <p>
+                  Lacey Beela is the bridge between software and soul, seamlessly weaving technology 
+                  with human connection. Through code, creation, and conscious integration, 
+                  I explore the intersection where digital innovation meets authentic expression.
+                </p>
+                <p>
+                  My journey spans multiple creative and technical realms - from software development 
+                  to writing, from radio broadcasting to photography. Each medium offers a unique 
+                  lens through which to explore the deeper questions of our digital age.
+                </p>
+                <p>
+                  At the heart of my work lies a commitment to integration: bringing together 
+                  disparate elements to create something beautiful, functional, and meaningful. 
+                  Whether through lines of code or captured moments, I believe in the power 
+                  of intentional creation.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* What I Do Section */}
+      <Section className="bg-cream">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold text-center mb-12" style={{ color: '#4A284D' }}>
+            What I Do
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            
+            {/* Software Development */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-amber/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl">💻</span>
+              </div>
+              <h3 className="text-xl font-bold mb-3" style={{ color: '#4A284D' }}>
+                Software Development
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Building digital experiences that bridge functionality with human-centered design, 
+                creating tools that enhance rather than complicate life.
+              </p>
+            </div>
+
+            {/* Photography */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-blush/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl">📸</span>
+              </div>
+              <h3 className="text-xl font-bold mb-3" style={{ color: '#4A284D' }}>
+                Photography
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Through Here Now Media, capturing authentic moments and emotions, 
+                preserving memories with artistic vision and technical precision.
+              </p>
+            </div>
+
+            {/* Writing */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-ether/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl">✍️</span>
+              </div>
+              <h3 className="text-xl font-bold mb-3" style={{ color: '#4A284D' }}>
+                Writing
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Exploring ideas through words, sharing insights on technology, creativity, 
+                and the human experience in our rapidly evolving digital landscape.
+              </p>
+            </div>
+
+            {/* Radio */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-sage/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl">🎙️</span>
+              </div>
+              <h3 className="text-xl font-bold mb-3" style={{ color: '#4A284D' }}>
+                Radio
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Broadcasting from The Last Radio Station on Earth, creating audio experiences 
+                that connect listeners with deeper conversations and authentic expression.
+              </p>
+            </div>
+
+            {/* Breathwork */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-cream/40 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-plum/20">
+                <span className="text-2xl">🌬️</span>
+              </div>
+              <h3 className="text-xl font-bold mb-3" style={{ color: '#4A284D' }}>
+                Breathwork
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Facilitating conscious breathing practices through the Conscious Breathers Collective, 
+                creating space for presence, healing, and deeper connection with self.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* Philosophy Section */}
+      <Section className="bg-plum text-cream">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-8">
+            My Philosophy
+          </h2>
+          <div className="text-lg leading-relaxed space-y-6">
+            <p>
+              <strong>Integration.</strong> In a world of silos and specialization, 
+              I believe in the power of bringing together diverse disciplines, 
+              perspectives, and ways of knowing.
+            </p>
+            <p>
+              <strong>Breath.</strong> Technology should enhance our humanity, 
+              not diminish it. Creating space for reflection, presence, 
+              and authentic connection in our digital interactions.
+            </p>
+            <p>
+              <strong>Code.</strong> Whether in programming languages or life itself, 
+              the patterns we create and the systems we build shape our reality. 
+              Let's code with intention and awareness.
+            </p>
+            <p>
+              <strong>Creation.</strong> At the heart of everything lies the creative act - 
+              the bringing forth of something new, beautiful, and meaningful 
+              into the world.
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      {/* Connect Section */}
+      <Section className="bg-sand">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-8" style={{ color: '#4A284D' }}>
+            Let's Connect
+          </h2>
+          <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
+            Whether you're interested in collaborating on a project, discussing ideas, 
+            or simply connecting with someone who values the integration of technology and soul.
+          </p>
+          
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href="/contact">
+              <GlowButton>Get In Touch</GlowButton>
+            </a>
+            <a href="/here-now-media">
+              <GlowButton className="bg-plum hover:bg-plum/90">
+                Photography Services
+              </GlowButton>
+            </a>
+            <a 
+              href="https://conscious-breathers-collective.mn.co/share/ugqAqCyGi8r0Fono?utm_source=manual" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <GlowButton className="bg-ether hover:bg-ether/90">
+                Join Breathers Collective
+              </GlowButton>
+            </a>
+          </div>
+          
+          <div className="mt-12 flex justify-center gap-8">
+            <a 
+              href="https://substack.com/@laceybeela" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-plum hover:text-amber transition-colors"
+            >
+              Writing on Substack
+            </a>
+            <a 
+              href="https://patreon.com/TheLastRadioStationonEarth" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-plum hover:text-amber transition-colors"
+            >
+              Radio on Patreon
+            </a>
+            <a 
+              href="https://instagram.com/herenowmediaco" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-plum hover:text-amber transition-colors"
+            >
+              Photography Instagram
+            </a>
+          </div>
+        </div>
+      </Section>
+    </>
+  )
 }
