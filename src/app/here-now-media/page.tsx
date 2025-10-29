@@ -40,7 +40,7 @@ export default function HereNowMediaPage() {
             'C6D8D929-F0E9-4EAD-A8B8-EAB94F72913D.jpeg',
             'D386BE6F-A3A4-4FBB-85E4-473642C9A126.jpeg',
             'P1000045.jpg',
-            'P1000249.jpg',
+            'P1000135.jpg',
             'P1000288.jpg'
           ].map((image, i) => (
             <div key={i} className="aspect-square bg-gray-200 rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg">
