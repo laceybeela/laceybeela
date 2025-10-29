@@ -1,3 +1,5 @@
+import { getSubstackFeed } from '@/lib/substack'
+
 export default async function SubstackFeed() {
 const posts = await getSubstackFeed()
 return (
