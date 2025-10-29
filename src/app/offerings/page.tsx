@@ -39,9 +39,10 @@ export default function OfferingsPage() {
           <OfferingCard
             title="Conscious Code"
             desc="Website and app development for healing communities, creative collectives, and soulful startups. Technology that enhances rather than complicates."
-            cta="Start a Project"
+            cta="Book Consultation"
             gradient="from-sage via-ether to-sand"
-            href="/contact"
+            href="https://cal.com/herenowmedia/30min"
+            external={true}
           />
           
           {/* Radio */}
