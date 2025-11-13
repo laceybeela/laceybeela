@@ -29,7 +29,7 @@ export default function HomePage() {
             <div className="order-2 lg:order-1">
               <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
                 <Image
-                  src="/IMG_2488.JPG"
+                  src="/6BB9DCEF-A81A-4C77-BB27-DA9F39BDBE86.JPEG"
                   alt="Lacey Beela"
                   width={400}
                   height={400}
