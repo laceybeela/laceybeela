@@ -28,11 +28,10 @@ export default function OfferingsPage() {
           {/* Breathwork & Integration */}
           <OfferingCard
             title="Conscious Breathers Collective"
-            desc="Facilitating conscious breathing practices, community connection, and integration circles for presence, healing, and deeper self-connection."
-            cta="Join the Collective"
+            desc="Join our community or book a personalized 1:1 breathwork session. Explore conscious breathing practices, healing, and deeper self-connection through group support or individual guidance."
+            cta="Explore Options"
             gradient="from-ether via-cream to-sage"
-            href="https://conscious-breathers-collective.mn.co/share/ugqAqCyGi8r0Fono?utm_source=manual"
-            external={true}
+            href="/breathwork"
           />
           
           {/* Software Development */}
