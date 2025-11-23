@@ -156,7 +156,7 @@ export default function HereNowMediaPage() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-6 h-6 bg-ether rounded-full flex-shrink-0"></div>
-                  <span>(435) 668-5186</span>
+                  <span>(928) 362-0632</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-6 h-6 bg-blush rounded-full flex-shrink-0"></div>

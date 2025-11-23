@@ -66,7 +66,7 @@ The breathwork booking system offers 6 sacred focus areas, each with detailed de
 
 2. **Shadow Illumination** - A gentle but honest journey into the parts of yourself you've tucked away—anger, fear, jealousy, shame. Not to fix them, but to meet them with awareness and compassion.
 
-3. **Grief as Sacred Teacher** - Holding space for heartbreak, transition, loss, endings, and the slow unwinding of letting go. A space to feel what you've been carrying alone.
+3. **Grief as a Sacred Teacher** - Holding space for heartbreak, transition, loss, endings, and the slow unwinding of letting go. A space to feel what you've been carrying alone.
 
 4. **Nervous System Reset** - A restorative session focused on downshifting out of chronic stress, burnout, and overwhelm. Rebalancing your body through breath, presence, and gentle body awareness.
 

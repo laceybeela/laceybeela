@@ -180,7 +180,7 @@ export default function BreathworkForm() {
             <option value="">Choose a sacred focus area...</option>
             <option value="inner-child-return">Inner Child Return</option>
             <option value="shadow-illumination">Shadow Illumination</option>
-            <option value="grief-sacred-teacher">Grief as Sacred Teacher</option>
+            <option value="grief-sacred-teacher">Grief as a Sacred Teacher</option>
             <option value="nervous-system-reset">Nervous System Reset</option>
             <option value="release-rebirth">Release & Rebirth</option>
             <option value="healing-heart-space">Healing the Heart Space</option>
