@@ -2,8 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 
 export async function POST(request: NextRequest) {
+  console.log('Breathwork booking API called')
+  
   try {
     const body = await request.json()
+    console.log('Request body received:', { 
+      name: body.name, 
+      email: body.email, 
+      focusArea: body.focusArea 
+    })
+    
     const {
       name,
       email,
@@ -19,6 +27,7 @@ export async function POST(request: NextRequest) {
 
     // Basic validation
     if (!name || !email || !whatBringsYou || !isNewToBreathwork || !focusArea || !waiverAgreed) {
+      console.error('Missing required fields:', { name: !!name, email: !!email, whatBringsYou: !!whatBringsYou, isNewToBreathwork: !!isNewToBreathwork, focusArea: !!focusArea, waiverAgreed: !!waiverAgreed })
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -26,10 +35,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if all required environment variables are set
+    console.log('Environment check:', {
+      SMTP_USER: process.env.SMTP_USER ? 'SET' : 'NOT SET',
+      SMTP_PASSWORD: process.env.SMTP_PASSWORD ? 'SET' : 'NOT SET',
+      SMTP_HOST: process.env.SMTP_HOST || 'DEFAULT (smtp.gmail.com)',
+      SMTP_PORT: process.env.SMTP_PORT || 'DEFAULT (587)',
+      SMTP_FROM: process.env.SMTP_FROM || 'NOT SET'
+    })
+    
     if (!process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
       console.error('Missing SMTP credentials')
       return NextResponse.json(
-        { error: 'Email service not configured' },
+        { error: 'Email service not configured', debug: 'Missing SMTP_USER or SMTP_PASSWORD' },
         { status: 500 }
       )
     }
@@ -93,6 +110,8 @@ SESSION DETAILS REMINDER:
 Please respond within 24 hours to schedule this session.
     `.trim()
 
+    console.log('Creating transporter and sending email...')
+    
     // Send email with timeout wrapper
     const sendEmailWithTimeout = () => {
       return Promise.race([
@@ -109,7 +128,9 @@ Please respond within 24 hours to schedule this session.
       ])
     }
 
-    await sendEmailWithTimeout()
+    console.log('Attempting to send email...')
+    const result = await sendEmailWithTimeout()
+    console.log('Email sent successfully:', result)
 
     return NextResponse.json({ success: true })
   } catch (error) {
