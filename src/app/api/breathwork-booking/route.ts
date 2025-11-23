@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 
 export async function POST(request: NextRequest) {
   console.log('Breathwork booking API called')
@@ -137,9 +138,10 @@ Please respond within 24 hours to schedule this session.
       ])
     }
 
+    // Try SMTP first, then fallback to Resend
     console.log('Attempting to send email with port 587...')
     try {
-      const result = await sendEmailWithTimeout(transporter, 15000)
+      const result = await sendEmailWithTimeout(transporter, 10000)
       console.log('Email sent successfully with port 587:', result)
     } catch (error587) {
       console.log('Port 587 failed, trying port 465 (SSL):', error587)
@@ -147,11 +149,31 @@ Please respond within 24 hours to schedule this session.
       // Try with SSL port 465
       const sslTransporter = createTransporter(true)
       try {
-        const result = await sendEmailWithTimeout(sslTransporter, 15000)
+        const result = await sendEmailWithTimeout(sslTransporter, 10000)
         console.log('Email sent successfully with port 465 (SSL):', result)
       } catch (error465) {
-        console.error('Both ports failed:', { port587: error587, port465: error465 })
-        throw error465
+        console.log('Both SMTP ports failed, trying Resend API...', { port587: error587, port465: error465 })
+        
+        // Fallback to Resend if SMTP fails
+        if (process.env.RESEND_API_KEY) {
+          try {
+            const resend = new Resend(process.env.RESEND_API_KEY)
+            const result = await resend.emails.send({
+              from: 'Lacey Beela Breathwork <booking@laceybeela.org>',
+              to: ['laceybeela@gmail.com'],
+              subject: `New 1:1 Breathwork Booking Request - ${name}`,
+              text: emailContent,
+              replyTo: email,
+            })
+            console.log('Email sent successfully with Resend:', result)
+          } catch (resendError) {
+            console.error('Resend also failed:', resendError)
+            throw new Error('All email services failed')
+          }
+        } else {
+          console.error('No RESEND_API_KEY found, cannot use fallback')
+          throw error465
+        }
       }
     }
 
