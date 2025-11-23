@@ -25,15 +25,30 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Check if all required environment variables are set
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
+      console.error('Missing SMTP credentials')
+      return NextResponse.json(
+        { error: 'Email service not configured' },
+        { status: 500 }
+      )
+    }
+
     // Create transporter (using environment variables for email config)
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: false,
+      connectionTimeout: 30000, // 30 seconds
+      greetingTimeout: 30000, // 30 seconds
+      socketTimeout: 30000, // 30 seconds
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
+      tls: {
+        rejectUnauthorized: false
+      }
     })
 
     // Format focus area for display
@@ -78,14 +93,23 @@ SESSION DETAILS REMINDER:
 Please respond within 24 hours to schedule this session.
     `.trim()
 
-    // Send email
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
-      to: 'laceybeela@gmail.com',
-      subject: `New 1:1 Breathwork Booking Request - ${name}`,
-      text: emailContent,
-      replyTo: email,
-    })
+    // Send email with timeout wrapper
+    const sendEmailWithTimeout = () => {
+      return Promise.race([
+        transporter.sendMail({
+          from: process.env.SMTP_FROM || process.env.SMTP_USER,
+          to: 'laceybeela@gmail.com',
+          subject: `New 1:1 Breathwork Booking Request - ${name}`,
+          text: emailContent,
+          replyTo: email,
+        }),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Email sending timeout after 25 seconds')), 25000)
+        )
+      ])
+    }
+
+    await sendEmailWithTimeout()
 
     return NextResponse.json({ success: true })
   } catch (error) {

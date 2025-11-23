@@ -18,6 +18,7 @@ const focusAreaDescriptions = {
 export default function BreathworkPage() {
   const [showForm, setShowForm] = useState(false)
   const [hoveredArea, setHoveredArea] = useState<string | null>(null)
+  const [selectedArea, setSelectedArea] = useState<string | null>(null)
 
   return (
     <>
@@ -63,26 +64,32 @@ export default function BreathworkPage() {
                       {Object.entries(focusAreaDescriptions).map(([title, description]) => (
                         <motion.span
                           key={title}
-                          className="bg-ether/30 px-2 py-2 rounded-lg text-plum text-center cursor-pointer transition-colors hover:bg-ether/50"
+                          className={`bg-ether/30 px-2 py-2 rounded-lg text-plum text-center cursor-pointer transition-colors hover:bg-ether/50 ${
+                            selectedArea === title ? 'bg-ether/50' : ''
+                          }`}
                           onHoverStart={() => setHoveredArea(title)}
                           onHoverEnd={() => setHoveredArea(null)}
+                          onClick={() => setSelectedArea(selectedArea === title ? null : title)}
                           whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
                         >
                           {title}
                         </motion.span>
                       ))}
                     </div>
                     
-                    {hoveredArea && (
+                    {(hoveredArea || selectedArea) && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
                         className="bg-plum/5 rounded-lg p-3 border-l-4 border-ether"
                       >
-                        <h4 className="font-semibold text-sm mb-1" style={{ color: '#4A284D' }}>{hoveredArea}</h4>
+                        <h4 className="font-semibold text-sm mb-1" style={{ color: '#4A284D' }}>
+                          {hoveredArea || selectedArea}
+                        </h4>
                         <p className="text-xs text-plum/80 leading-relaxed">
-                          {focusAreaDescriptions[hoveredArea as keyof typeof focusAreaDescriptions]}
+                          {focusAreaDescriptions[(hoveredArea || selectedArea) as keyof typeof focusAreaDescriptions]}
                         </p>
                       </motion.div>
                     )}
