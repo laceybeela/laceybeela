@@ -51,22 +51,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create transporter (using environment variables for email config)
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: false,
-      connectionTimeout: 30000, // 30 seconds
-      greetingTimeout: 30000, // 30 seconds
-      socketTimeout: 30000, // 30 seconds
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false
+    // Create transporter with fallback to port 465 (SSL) if 587 fails
+    const createTransporter = (useSSL = false) => {
+      const config = {
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: useSSL ? 465 : parseInt(process.env.SMTP_PORT || '587'),
+        secure: useSSL, // true for 465, false for other ports
+        connectionTimeout: 20000, // 20 seconds
+        greetingTimeout: 20000, // 20 seconds
+        socketTimeout: 20000, // 20 seconds
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASSWORD,
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
       }
-    })
+      console.log('SMTP config:', { ...config, auth: { user: 'SET', pass: 'SET' } })
+      return nodemailer.createTransport(config)
+    }
+
+    // Try port 587 first, then 465 as fallback
+    let transporter = createTransporter(false)
 
     // Format focus area for display
     const focusAreaLabels: { [key: string]: string } = {
@@ -112,25 +119,41 @@ Please respond within 24 hours to schedule this session.
 
     console.log('Creating transporter and sending email...')
     
-    // Send email with timeout wrapper
-    const sendEmailWithTimeout = () => {
+    const emailData = {
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to: 'laceybeela@gmail.com',
+      subject: `New 1:1 Breathwork Booking Request - ${name}`,
+      text: emailContent,
+      replyTo: email,
+    }
+    
+    // Send email with timeout wrapper and port fallback
+    const sendEmailWithTimeout = async (transporterToUse: any, timeoutMs: number = 15000) => {
       return Promise.race([
-        transporter.sendMail({
-          from: process.env.SMTP_FROM || process.env.SMTP_USER,
-          to: 'laceybeela@gmail.com',
-          subject: `New 1:1 Breathwork Booking Request - ${name}`,
-          text: emailContent,
-          replyTo: email,
-        }),
+        transporterToUse.sendMail(emailData),
         new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Email sending timeout after 25 seconds')), 25000)
+          setTimeout(() => reject(new Error(`Email sending timeout after ${timeoutMs/1000} seconds`)), timeoutMs)
         )
       ])
     }
 
-    console.log('Attempting to send email...')
-    const result = await sendEmailWithTimeout()
-    console.log('Email sent successfully:', result)
+    console.log('Attempting to send email with port 587...')
+    try {
+      const result = await sendEmailWithTimeout(transporter, 15000)
+      console.log('Email sent successfully with port 587:', result)
+    } catch (error587) {
+      console.log('Port 587 failed, trying port 465 (SSL):', error587)
+      
+      // Try with SSL port 465
+      const sslTransporter = createTransporter(true)
+      try {
+        const result = await sendEmailWithTimeout(sslTransporter, 15000)
+        console.log('Email sent successfully with port 465 (SSL):', result)
+      } catch (error465) {
+        console.error('Both ports failed:', { port587: error587, port465: error465 })
+        throw error465
+      }
+    }
 
     return NextResponse.json({ success: true })
   } catch (error) {
