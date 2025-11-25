@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import nodemailer from 'nodemailer'
 import { Resend } from 'resend'
 
 export async function POST(request: NextRequest) {
@@ -35,46 +34,21 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if all required environment variables are set
+    // Check if Resend API key is configured
     console.log('Environment check:', {
-      SMTP_USER: process.env.SMTP_USER ? 'SET' : 'NOT SET',
-      SMTP_PASSWORD: process.env.SMTP_PASSWORD ? 'SET' : 'NOT SET',
-      SMTP_HOST: process.env.SMTP_HOST || 'DEFAULT (smtp.gmail.com)',
-      SMTP_PORT: process.env.SMTP_PORT || 'DEFAULT (587)',
-      SMTP_FROM: process.env.SMTP_FROM || 'NOT SET'
+      RESEND_API_KEY: process.env.RESEND_API_KEY ? 'SET' : 'NOT SET'
     })
     
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
-      console.error('Missing SMTP credentials')
+    if (!process.env.RESEND_API_KEY) {
+      console.error('Missing Resend API key')
       return NextResponse.json(
-        { error: 'Email service not configured', debug: 'Missing SMTP_USER or SMTP_PASSWORD' },
+        { error: 'Email service not configured', debug: 'Missing RESEND_API_KEY' },
         { status: 500 }
       )
     }
 
-    // Create transporter with fallback to port 465 (SSL) if 587 fails
-    const createTransporter = (useSSL = false) => {
-      const config = {
-        host: process.env.SMTP_HOST || 'smtp.gmail.com',
-        port: useSSL ? 465 : parseInt(process.env.SMTP_PORT || '587'),
-        secure: useSSL, // true for 465, false for other ports
-        connectionTimeout: 20000, // 20 seconds
-        greetingTimeout: 20000, // 20 seconds
-        socketTimeout: 20000, // 20 seconds
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
-        },
-        tls: {
-          rejectUnauthorized: false
-        }
-      }
-      console.log('SMTP config:', { ...config, auth: { user: 'SET', pass: 'SET' } })
-      return nodemailer.createTransport(config)
-    }
-
-    // Try port 587 first, then 465 as fallback
-    let transporter = createTransporter(false)
+    // Initialize Resend client
+    const resend = new Resend(process.env.RESEND_API_KEY)
 
     // Format focus area for display
     const focusAreaLabels: { [key: string]: string } = {
@@ -118,75 +92,27 @@ SESSION DETAILS REMINDER:
 Please respond within 24 hours to schedule this session.
     `.trim()
 
-    console.log('Creating transporter and sending email...')
+    // Send email using Resend
+    console.log('Sending email using Resend...')
     
-    const emailData = {
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
-      to: 'laceybeela@gmail.com',
-      subject: `New 1:1 Breathwork Booking Request - ${name}`,
-      text: emailContent,
-      replyTo: email,
-    }
-    
-    // Send email with timeout wrapper and port fallback
-    const sendEmailWithTimeout = async (transporterToUse: any, timeoutMs: number = 15000) => {
-      return Promise.race([
-        transporterToUse.sendMail(emailData),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error(`Email sending timeout after ${timeoutMs/1000} seconds`)), timeoutMs)
-        )
-      ])
-    }
-
-    // Try SMTP first, then fallback to Resend
-    console.log('Attempting to send email with port 587...')
     try {
-      const result = await sendEmailWithTimeout(transporter, 10000)
-      console.log('Email sent successfully with port 587:', result)
-    } catch (error587) {
-      console.log('Port 587 failed, trying port 465 (SSL):', error587)
+      const result = await resend.emails.send({
+        from: 'Lacey Beela Breathwork <booking@laceybeela.org>',
+        to: ['laceybeela@gmail.com'],
+        subject: `New 1:1 Breathwork Booking Request - ${name}`,
+        text: emailContent,
+        replyTo: email,
+      })
       
-      // Try with SSL port 465
-      const sslTransporter = createTransporter(true)
-      try {
-        const result = await sendEmailWithTimeout(sslTransporter, 10000)
-        console.log('Email sent successfully with port 465 (SSL):', result)
-      } catch (error465) {
-        console.log('Both SMTP ports failed, trying Resend API...', { port587: error587, port465: error465 })
-        
-        // Fallback to Resend if SMTP fails
-        if (process.env.RESEND_API_KEY) {
-          try {
-            const resend = new Resend(process.env.RESEND_API_KEY)
-            const result = await resend.emails.send({
-              from: 'Lacey Beela Breathwork <booking@laceybeela.org>',
-              to: ['laceybeela@gmail.com'],
-              subject: `New 1:1 Breathwork Booking Request - ${name}`,
-              text: emailContent,
-              replyTo: email,
-            })
-            console.log('Email sent successfully with Resend:', result)
-          } catch (resendError) {
-            console.error('Resend also failed:', resendError)
-            throw new Error('All email services failed')
-          }
-        } else {
-          console.error('No RESEND_API_KEY found, cannot use fallback')
-          throw error465
-        }
-      }
+      console.log('Email sent successfully with Resend:', result)
+    } catch (resendError) {
+      console.error('Resend email failed:', resendError)
+      throw new Error('Email sending failed')
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Detailed error sending email:', error)
-    console.error('SMTP Config:', {
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      user: process.env.SMTP_USER ? 'SET' : 'NOT SET',
-      password: process.env.SMTP_PASSWORD ? 'SET' : 'NOT SET',
-      from: process.env.SMTP_FROM
-    })
+    console.error('Error processing booking request:', error)
     return NextResponse.json(
       { error: 'Failed to send booking request', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
