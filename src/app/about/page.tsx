@@ -45,20 +45,19 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-gray-700 leading-relaxed">
                 <p>
-                  Lacey Beela is the bridge between software and soul, seamlessly weaving technology 
-                  with human connection. Through code, creation, and conscious integration, 
-                  I explore the intersection where digital innovation meets authentic expression.
+                  I'm Lacey Beela—an integrative creative guide, a freebirthing mother, and a software engineer with more than ten years of experience. My path has been shaped by unlearning: deschooling, decolonizing, and reconnecting with my own inner authority.
                 </p>
                 <p>
-                  My journey spans multiple creative and technical realms - from software development 
-                  to writing, from radio broadcasting to photography. Each medium offers a unique 
-                  lens through which to explore the deeper questions of our digital age.
+                  I come from the world of software, where I learned to translate complexity into clarity. Over time, I realized those same skills lived in my creative life as well—helping me listen, observe, and bring ideas into form.
                 </p>
                 <p>
-                  At the heart of my work lies a commitment to integration: bringing together 
-                  disparate elements to create something beautiful, functional, and meaningful. 
-                  Whether through lines of code or captured moments, I believe in the power 
-                  of intentional creation.
+                  Photography has been a steady passion of mine since 2011. Breathwork became another turning point. I trained in Conscious Connected Breath with Alchemy of Breath from 2022–2023, and the work opened a deeper relationship with intuition, grief, and embodiment.
+                </p>
+                <p>
+                  Today, I move between many mediums—software, writing, breathwork, radio, photography—because that's simply how I'm built. As a Venus in Gemini, I was never meant to exist in one box.
+                </p>
+                <p>
+                  The thread that ties everything together is <strong>integration</strong>: helping people come home to their own wisdom and creating spaces where inner and outer worlds can meet.
                 </p>
               </div>
             </div>
